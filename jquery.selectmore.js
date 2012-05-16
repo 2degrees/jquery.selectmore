@@ -70,11 +70,14 @@
                 }
             });
             
+            // wrap the search box
+            this.search_box.wrap('<div class="'+this.widgetBaseClass+'-wrap" />')
+
             // Add a "show all" control
             this.show_all_control = $('<span/>');
-            this.show_all_control.addClass('ui-icon ui-icon-circle-triangle-s');
+            this.show_all_control.addClass(this.widgetBaseClass+'-dropdown ui-icon ui-icon-circle-triangle-s');
             this.search_box.after(this.show_all_control);
-            
+
             // Listen for a click on the remove control
             this.selections.on('click.' + this.widgetName, 'a', function (event_object) {
                 event_object.preventDefault();
@@ -99,7 +102,7 @@
             var $item = $('<li/>', {text: label});
             $item.data('value', value);
 
-            var $remove_control = $('<a/>', {href: '#remove'});
+            var $remove_control = $('<a/>', {href: '#remove', class: this.widgetBaseClass+'-remove'});
             $remove_control.html('&times;');
             $item.append($remove_control);
             
