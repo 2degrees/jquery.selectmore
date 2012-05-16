@@ -55,8 +55,10 @@
             });
             
             // Set-up the autocomplete input
+            this.search_box_wrapper = $('<div/>');
+            this.search_box_wrapper.addClass(this.widgetBaseClass + '-wrap');
+            
             this.search_box = $('<input/>', {type: 'text', autocomplete: 'off'});
-            this.element.after(this.search_box);
             this.search_box.autocomplete({
                 source: $.proxy(widget._get_options, widget),
                 delay: 0,
@@ -70,12 +72,12 @@
                 }
             });
             
-            // wrap the search box
-            this.search_box.wrap('<div class="'+this.widgetBaseClass+'-wrap" />')
+            this.search_box_wrapper.append(this.search_box)
+            this.element.after(this.search_box_wrapper);
 
             // Add a "show all" control
             this.show_all_control = $('<span/>');
-            this.show_all_control.addClass(this.widgetBaseClass+'-dropdown ui-icon ui-icon-circle-triangle-s');
+            this.show_all_control.addClass(this.widgetBaseClass + '-dropdown ui-icon ui-icon-circle-triangle-s');
             this.search_box.after(this.show_all_control);
 
             // Listen for a click on the remove control
@@ -102,7 +104,8 @@
             var $item = $('<li/>', {text: label});
             $item.data('value', value);
 
-            var $remove_control = $('<a/>', {href: '#remove', class: this.widgetBaseClass+'-remove'});
+            var $remove_control = $('<a/>', {href: '#remove'});
+            $remove_control.addClass(this.widgetBaseClass + '-remove');
             $remove_control.html('&times;');
             $item.append($remove_control);
             
