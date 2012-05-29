@@ -25,7 +25,7 @@ Include the plugin-script along with the jQuery and the required jQuery UI depen
 Then inside a javascript file (or inline in a script tag), call the ``selectmore()`` method on the wrapped set you wish to update, e.g.
 
 ```javascript
-$('select[multiple]').selectmultiple();
+$('select[multiple]').selectmore();
 ```
 
 ## Supported browsers
