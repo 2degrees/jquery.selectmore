@@ -21,7 +21,7 @@
     
     $.widget('ui.selectmore', {
         options: {
-            remove_label: "&times;"
+            remove_label: '&times;'
         },
 
         _create: function () {
