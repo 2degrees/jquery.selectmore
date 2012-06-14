@@ -20,6 +20,10 @@
 (function ($) {
     
     $.widget('ui.selectmore', {
+        options: {
+            remove_label: "&times;"
+        },
+
         _create: function () {
             if (!this.element.is('select[multiple]')) {
                 $.error(this.widgetName + ' can only be able applied to ' +
@@ -106,7 +110,7 @@
 
             var $remove_control = $('<a/>', {href: '#remove'});
             $remove_control.addClass(this.widgetBaseClass + '-remove');
-            $remove_control.html('&times;');
+            $remove_control.html(this.options.remove_label);
             $item.append($remove_control);
             
             this.selections.append($item);
