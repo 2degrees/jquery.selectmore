@@ -66,7 +66,10 @@
         <script src="jquery.selectmore.js"></script>
         <script>
 $(function () {
-        $('select[multiple]').selectmore();
+        $('select[multiple]').selectmore({
+            max_items: 5,
+            max_items_message: 'You can only select 5 states'
+        });
 });
         </script>
     </body>

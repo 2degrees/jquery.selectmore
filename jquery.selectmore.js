@@ -16,12 +16,16 @@
  *  - jQuery UI 1.8.20+ (autocomplete and its dependencies)
  */
 
-'use strict';
 (function ($) {
+    'use strict';
+    
+    var ENTER_KEY_CODES = [$.ui.keyCode.ENTER, $.ui.keyCode.NUMPAD_ENTER];
     
     $.widget('ui.selectmore', {
         options: {
-            remove_label: '&times;'
+            remove_label: '&times;',
+            max_items: null,
+            max_items_message: 'No more items can be added'
         },
 
         _create: function () {
@@ -76,12 +80,25 @@
                 }
             });
             
-            this.search_box_wrapper.append(this.search_box)
+            // Prevent the search box from submitting the form
+            this.search_box.on(
+                'keypress.' + this.widgetName,
+                function (event_object) {
+                    if ($.inArray(event_object.keyCode, ENTER_KEY_CODES) !== -1) {
+                        event_object.preventDefault();
+                    }
+                }
+            );
+            
+            this.search_box_wrapper.append(this.search_box);
             this.element.after(this.search_box_wrapper);
 
             // Add a "show all" control
             this.show_all_control = $('<span/>');
-            this.show_all_control.addClass(this.widgetBaseClass + '-dropdown ui-icon ui-icon-circle-triangle-s');
+            this.show_all_control.addClass(
+                this.widgetBaseClass +
+                '-dropdown ui-icon ui-icon-circle-triangle-s'
+            );
             this.search_box.after(this.show_all_control);
 
             // Listen for a click on the remove control
@@ -101,6 +118,20 @@
                 widget.search_box.autocomplete('search', '');
             });
             
+            // Add an element to convey that the maximum number of items has
+            // been reached
+            this.max_items_text = $(
+                '<span />',
+                {text: this.options.max_items_message}
+            );
+            this.max_items_text.hide();
+            this.max_items_text.addClass(this.widgetBaseClass + '-max-items');
+            this.search_box_wrapper.before(this.max_items_text);
+            
+            // Ensure that, initially, the maximum number of items has not been
+            // exceeded
+            this._check_max_items();
+            
             return this;
         },
         
@@ -119,6 +150,8 @@
             this.element
                 .children('[value="' + value + '"]')
                 .prop('selected', true);
+            
+            this._check_max_items();
         },
         
         _remove_item: function (remove_link) {
@@ -132,11 +165,13 @@
             this.element
                 .children('[value="' + selected_value + '"]')
                 .prop('selected', false);
+            
+            this._check_max_items();
         },
         
         _get_options: function (input, callback) {
             var options = [];
-            var term_re = new RegExp(input['term'].toLowerCase(), 'i');
+            var term_re = new RegExp(input.term.toLowerCase(), 'i');
             this.element.children().not(':selected').each(function () {
                 var $option = $(this);
                 var option_text = $option.text();
@@ -153,13 +188,29 @@
             callback(options);
         },
         
+        _check_max_items: function () {
+            if (this.options.max_items === null || !this.max_items_text) {
+                return;
+            }
+            var current_item_count = this.selections.children().length;
+            if (current_item_count < this.options.max_items) {
+                this.max_items_text.hide();
+                this.search_box_wrapper.show();
+            } else {
+                this.search_box_wrapper.hide();
+                this.max_items_text.show();
+            }
+        },
+        
         destroy: function () {
             $.Widget.prototype.destroy.call(this);
             this.search_box.remove();
             this.selections.remove();
             this.show_all_control.remove();
             this.element.show();
+            this.max_items_text.remove();
             return this;
         }
     });
+
 })(jQuery);
