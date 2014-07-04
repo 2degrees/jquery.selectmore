@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2012, 2degrees Limited <egoddard@tech.2degreesnetwork.com>.
+ * Copyright (c) 2012-2014, 2degrees Limited <egoddard@tech.2degreesnetwork.com>.
  * All Rights Reserved.
  *
  * This file is part of jquery.selectmore
@@ -16,7 +16,15 @@
  *  - jQuery UI 1.8.20+ (autocomplete and its dependencies)
  */
 
-(function ($) {
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD
+        define(['jquery', 'jquery.ui'], factory);
+    } else {
+        // Browser globals
+        factory(jQuery);
+    }
+}(function ($) {
     'use strict';
     
     var ENTER_KEY_CODES = [$.ui.keyCode.ENTER, $.ui.keyCode.NUMPAD_ENTER];
@@ -213,4 +221,4 @@
         }
     });
 
-})(jQuery);
+}));

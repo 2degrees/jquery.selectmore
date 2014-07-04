@@ -28,6 +28,21 @@ Then inside a javascript file (or inline in a script tag), call the ``selectmore
 $('select[multiple]').selectmore();
 ```
 
+### AMD
+
+Alternatively you can include the module with require.js or similar:
+
+``` javascript
+require(['jquery', 'jquery.selectmore'], function ($) {
+  $(function () {
+    $('select[multiple]').selectmore();
+  });
+});
+```
+
+*NB* This relies on jQuery UI being available under the name 'jquery.ui'.
+
+
 ## Supported browsers
 
 * Internet Explorer 6+
